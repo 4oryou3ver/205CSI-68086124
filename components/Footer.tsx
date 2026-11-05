@@ -4,7 +4,7 @@ import Link from "next/link";
 
 
 import { Badge } from "@/components/tailgrids/core/badge";
-import { Facebook, Instagram } from "@tailgrids/icons";
+import { Twitter, Instagram } from "@tailgrids/icons";
 
 
 export default function Footer () {
@@ -13,16 +13,16 @@ export default function Footer () {
     <div className='mt-4 text-center'>
         {/* student  */}
         <div>
-            <Badge className='text-xl text-black  rounded-xl'>68086220 ฉัตรชัย บุญช่วย</Badge>
+            <Badge className='text-xl text-black  rounded-xl'>68086124 Phitsanupong Pimpirat</Badge>
         </div>
 
         {/* contact */}
         <div className='mt-4 flex justify-center gap-6 '>
-           <Link href={'https://www.facebook.com/chaichai.boonschuay.7'} target="_blank">
-            <Facebook className='text-blue-700'/></Link>
+           <Link href={'https://x.com/4ory0u_'} target="_blank">
+            <Twitter className='text-back-400'/></Link>
             
             <div className='border-l-1'></div>
-            <Instagram className='text-pink-500'/>
+            <Instagram className='text-back-500'/>
           
             
             

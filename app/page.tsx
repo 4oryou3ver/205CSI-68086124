@@ -28,10 +28,10 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-1.5">
             <h2 className="font-bold text-lg text-gray-950">
-              ฉัตรชัย บุญช่วย 
+              Phitsanupong Pimpirat
             </h2>
             <p className="text-sm text-gray-700 font-medium">
-              ID: 68086220
+              ID: 68086124
             </p>
             <p className="text-sm text-gray-700">
               Computer Science Student
@@ -45,8 +45,8 @@ export default function Home() {
               <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">
                 Career Goal:
               </h3>
-              <p className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                🚀 Full-Stack Developer
+              <p className="text-xs font-semibold text-back-600 bg-rad-50 px-2 py-1 rounded">
+                Full-Stack Developer
               </p>
             </div>
           </div>
