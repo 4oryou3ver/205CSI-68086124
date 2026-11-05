@@ -5,37 +5,39 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
 import { Button, buttonStyles } from "@/components/tailgrids/core/button";
-
-import Header from "@/components/Header";
+import Header from "@/components/Header"; // <--- นำเข้า Header กลับมา
 import Footer from "@/components/Footer";
 import { fetchProducts, Product } from "@/data/products";
 import { createContext, useEffect, useState } from "react";
 import { Badge } from "@/components/tailgrids/core/badge";
 import { doLogout } from "@/utils/login";
-import { Credential } from "@/data/credential"; // นำเข้า Credential Type
+import { Credential } from "@/data/credential";
 
 export const globalDataContext = createContext<any>(null);
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const pathname = usePathname();
   const router = useRouter();
-  console.log(pathname);
   
   const [products, setProducts] = useState<Product[]>([]);
   const [carts, setCarts] = useState<Product[]>([]);
-  const [role, setRole] = useState<string | null>(null); // State สำหรับเก็บ role ผู้ใช้งาน
+  
+  const [userInfo, setUserInfo] = useState<Credential | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
-  // ดึง role จาก localStorage เมื่อเปิดหน้าเว็บหรือเปลี่ยนเส้นทาง
   useEffect(() => {
     const credentialString = localStorage.getItem('credential');
     if (credentialString) {
       try {
         const credential: Credential = JSON.parse(credentialString);
-        setRole(credential.role); // กำหนดค่า role เช่น 'admin', 'manager', 'user'
+        setUserInfo(credential);
+        setRole(credential.role);
       } catch (e) {
+        setUserInfo(null);
         setRole(null);
       }
     } else {
+      setUserInfo(null);
       setRole(null);
     }
   }, [pathname]);
@@ -46,10 +48,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     .catch((error) => setProducts([] as Product[]))
   }, [])
 
-  useEffect(() => {
-    console.log(products)
-  }, [products])
-
   const hanleLogout = () => {
     doLogout(router, '/login')
   }
@@ -58,9 +56,33 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <globalDataContext.Provider value={{ products, setProducts, carts, setCarts }} >
     <html>
       <body>
+        {/* เรียกใช้ Header (โลโก้ C-S-I-2-0-5 และ Front End Software Development) กลับมา */}
         <Header />
-        <nav className="flex justify-center gap-3 mt-4 items-center">
-         
+
+        {/* ส่วนแสดงข้อมูล ROLE, NAME, EMAIL */}
+        <div className="flex justify-center items-center gap-6 my-3 text-sm text-black">
+          <div>
+            <span className="font-bold mr-1">ROLE:</span> 
+            <span className="px-2 py-0.5 rounded-full bg-red-50 text-red-700 font-semibold uppercase">
+              {userInfo?.role || 'GUEST'}
+            </span>
+          </div>
+          <div>
+            <span className="font-bold mr-1">NAME:</span> 
+            <span className="px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold">
+              {userInfo?.name || 'Not logged in'}
+            </span>
+          </div>
+          <div>
+            <span className="font-bold mr-1">EMAIL:</span> 
+            <span className="px-3 py-0.5 rounded-full bg-gray-100 text-gray-700">
+              {userInfo?.email || '-'}
+            </span>
+          </div>
+        </div>
+
+        {/* แถบเมนูปุ่มนำทาง */}
+        <nav className="flex justify-center gap-3 mt-2 items-center">
          <Link href={"/"} 
          className={buttonStyles({
             appearance:pathname === "/" ? "fill" : "outline",
@@ -70,7 +92,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
              HOME
          </Link>
          
-         {/* Admin: จะไม่เห็น Animation และ Calculator */}
          {role !== 'admin' && (
            <>
              <Link href={"/animation"} className={buttonStyles({
@@ -90,7 +111,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
            </>
          )}
 
-         {/* Manager: จะไม่เห็น Todos */}
          {role !== 'manager' && (
            <Link href={"/todos"} className={buttonStyles({
              appearance:pathname === "/todos" ? "fill" : "outline",
@@ -100,7 +120,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                Todos
            </Link>
          )}
-
+        <div className="relative">
          <Link href={"/products"} className={buttonStyles({
            appearance:pathname === "/products" ? "fill" : "outline",
              variant:"primary",
@@ -108,7 +128,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
          })}>
              Products
          </Link>
-         
+         <Badge size="sm" 
+           className="absolute -top-2 -right-2 bg-blue-600 text-white">
+             {products.length}
+           </Badge>
+         </div>
          <div className="relative">
            <Link href={"/carts"} className={buttonStyles({
              appearance:pathname === "/carts" ? "fill" : "outline",
@@ -130,8 +154,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
          className='ml-1'
          onClick={() => hanleLogout()}
          >Logout</Button>
-
         </nav>
+
         <main>{children}</main>
         <Footer />
       </body>
