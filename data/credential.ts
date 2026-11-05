@@ -10,21 +10,21 @@ const users: User[] = [
   {
     email: "admin@company.com",
     password: "pass",
-    name: "นายยิ่งใหญ่ อยากเป็นเศรษฐี",
+    name: "Alice",
     role: "admin",
     other: "...",
   },
   {
     email: "user@company.com", // แก้ไขอีเมลไม่ให้ซ้ำกัน
     password: "pass",
-    name: "น.ส ปิ่นมนิ ศรีสะ",
+    name: "Aurora",
     role: "user",
     other: "...",
   },
   {
     email: "manager@company.com", // แก้ไขอีเมลไม่ให้ซ้ำกัน
     password: "pass",
-    name: "นางพรหมศรี บุญมา",
+    name: "Chloe ",
     role: "manager",
     other: "...",
   },
